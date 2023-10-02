@@ -11,6 +11,9 @@ dependencies:
   '@vueuse/core':
     specifier: ^10.4.1
     version: 10.4.1(vue@3.3.4)
+  '@webgpu/types':
+    specifier: ^0.1.35
+    version: 0.1.35
   axios:
     specifier: ^1.5.0
     version: 1.5.0
@@ -678,6 +681,10 @@ packages:
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
+    dev: false
+
+  /@webgpu/types@0.1.35:
+    resolution: {integrity: sha512-6mh8zm/DDdtY6c+DXRmYc/7wJ1RQitFFmQiviwV8BK1XB75lXigN8AC8netNUO4XWTm7zEZevWgdMzXgThwOtA==}
     dev: false
 
   /@windicss/config@1.9.1:

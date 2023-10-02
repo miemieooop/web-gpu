@@ -14,6 +14,7 @@
   "dependencies": {
     "@types/node": "^20.5.7",
     "@vueuse/core": "^10.4.1",
+    "@webgpu/types": "^0.1.35",
     "axios": "^1.5.0",
     "pinia": "^2.1.6",
     "vue": "^3.3.4",
