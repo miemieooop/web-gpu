@@ -58,8 +58,6 @@ const parse = (text: string) => {
       faceVertices.push(fVertices)
     }
   }
-  // console.log(faceVertices)
-  // console.log(vertices)
 
   return { vertices, faceVertices }
 }
