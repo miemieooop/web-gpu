@@ -1,9 +1,9 @@
 class Render {
-  canvas: HTMLCanvasElement
-  context: CanvasRenderingContext2D
+  private canvas: HTMLCanvasElement
+  private context: CanvasRenderingContext2D
   w: number
   h: number
-  color: string
+  private color: string
   constructor(canvas: HTMLCanvasElement) {
     if (!canvas) {
       new DOMException('Canvas is not defined')
@@ -18,7 +18,7 @@ class Render {
     this.color = 'white'
   }
 
-  drawPixel = (x: number, y: number) => {
+  private drawPixel = (x: number, y: number) => {
     this.context.fillStyle = this.color
     this.context.fillRect(x, y, 1, 1)
   }

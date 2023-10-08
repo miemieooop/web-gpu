@@ -17,13 +17,11 @@ const parse = (text: string) => {
   if (text.indexOf('\r\n') !== -1) {
     // 替换所有\r\n为\n
     text = text.replace(/\r\n/g, '\n')
-    console.log(1)
   }
 
   if (text.indexOf('\\\n') !== -1) {
     // 替换所有\\\n为空
     text = text.replace(/\\\n/g, '')
-    console.log(2)
   }
   const lines = text.split('\n')
 
