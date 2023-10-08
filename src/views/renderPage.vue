@@ -1,34 +1,49 @@
 <template>
   <div class="w-100vw h-100vh bg-gray-200 flex justify-center items-center">
-    <canvas class="w-500px h-500px bg-gray-900"></canvas>
+    <canvas width="800" height="800" class="w-500px h-500px bg-gray-900"></canvas>
   </div>
 </template>
 <script setup lang="ts">
 import { onMounted } from 'vue'
+import { load } from '~/utils/OBJLoader'
 
-onMounted(() => {
+onMounted(async () => {
+  const { vertices, faceVertices } = await load('./african_head.obj')
+
   const canvas = document.querySelector('canvas') as HTMLCanvasElement
   const ctx = canvas.getContext('2d')!
   const w = canvas.width
   const h = canvas.height
-  console.log(w, h)
+  ctx.translate(0, h)
+  ctx.rotate(Math.PI)
+  ctx.scale(-1, 1)
+  ctx.save()
 
   const canvasData = ctx.createImageData(w, h)
-  const white: Color = {
-    r: 255,
-    g: 255,
-    b: 255,
-    a: 255
-  }
+  let colors: Color[] = [
+    { r: 255, g: 0, b: 0, a: 255 }, // red
+    { r: 0, g: 255, b: 0, a: 255 }, // green
+    { r: 0, g: 0, b: 255, a: 255 }, // blue
+    { r: 255, g: 255, b: 255, a: 255 } //white
+  ]
   console.time()
-  drawLine({ ctx: ctx, cad: canvasData }, 0, 0, w, h, white)
+
+  for (const item of faceVertices) {
+    // 遍历三角面片
+    for (let i = 0; i < 3; i++) {
+      // 获取三角面片的三个顶点
+      const v0 = parseInt(item[i][0]) - 1
+      const v1 = parseInt(item[(i + 1) % 3][0]) - 1
+
+      const x0 = ((vertices[v0].x + 1) * w) / 2
+      const y0 = ((vertices[v0].y + 1) * h) / 2
+      const x1 = ((vertices[v1].x + 1) * w) / 2
+      const y1 = ((vertices[v1].y + 1) * h) / 2
+
+      drawLine({ ctx: ctx, cad: canvasData }, Math.round(x0), Math.round(y0), Math.round(x1), Math.round(y1), colors[3])
+    }
+  }
   updateCanvas(ctx, canvasData)
-  ctx.beginPath()
-  ctx.moveTo(0, h)
-  ctx.lineTo(w, 0)
-  ctx.closePath()
-  ctx.strokeStyle = 'white'
-  ctx.stroke()
   console.timeEnd()
 })
 type Color = {
@@ -44,6 +59,12 @@ const drawPixel = (ctx: CanvasRenderingContext2D, canvasData: ImageData, x: numb
   canvasData.data[index + 2] = color.b
   canvasData.data[index + 3] = color.a
 }
+
+// const drawPixelRect = (ctx: CanvasRenderingContext2D, x: number, y: number, color: string) => {
+//   ctx.fillStyle = color
+//   ctx.fillRect(x, y, 1, 1)
+// }
+
 type conTend = {
   ctx: CanvasRenderingContext2D
   cad: ImageData
