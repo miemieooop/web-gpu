@@ -1,3 +1,6 @@
+import { Vector } from '~/class/Vector'
+import { Point2, Point3 } from '~/types'
+
 class Render {
   private canvas: HTMLCanvasElement
   private context: CanvasRenderingContext2D
@@ -57,6 +60,37 @@ class Render {
         }
       }
     }
+  }
+
+  drawTriangle = (tPoint: Point3[], p: Point2, color: string) => {
+    this.color = color
+    // const AB = new Vector(tPoint[1].x - tPoint[0].x, tPoint[1].y - tPoint[0].y)
+    // const BC = new Vector(tPoint[2].x - tPoint[1].x, tPoint[2].y - tPoint[1].y)
+    // const CA = new Vector(tPoint[0].x - tPoint[2].x, tPoint[0].y - tPoint[2].y)
+
+    // const { boxmin, boxmax } = this.getBoxRange(tPoint)
+    // for (let x = boxmin[0]; x <= boxmax[0]; x++) {
+    //   for (let y = boxmin[1]; y <= boxmax[1]; y++) {
+    //     const ABp = AB.crossProduct(p)
+    //     const BCp = BC.crossProduct(p)
+    //     const CAp = CA.crossProduct(p)
+    //     console.log(ABp, BCp, CAp)
+    //   }
+    // }
+  }
+
+  getBoxRange = (p: Point3[]) => {
+    const boxmin = [this.w, this.h]
+    const boxmax = [0, 0]
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 2; j++) {
+        boxmin[0] = Math.min(boxmin[0], p[i].x)
+        boxmin[1] = Math.min(boxmin[1], p[i].y)
+        boxmax[0] = Math.max(boxmax[0], p[i].x)
+        boxmax[1] = Math.max(boxmax[1], p[i].y)
+      }
+    }
+    return { boxmin, boxmax }
   }
 }
 

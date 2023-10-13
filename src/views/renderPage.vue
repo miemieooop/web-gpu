@@ -5,12 +5,19 @@
 </template>
 <script setup lang="ts">
 import { onMounted } from 'vue'
+import { Vector } from '~/class/Vector'
 import { load } from '~/utils/OBJLoader'
 import { Render } from '~/utils/Render'
 
 onMounted(async () => {
   console.time()
   await init()
+  const one = new Vector(2, 1, 1)
+  const other = new Vector(1, 2, 2)
+  console.log(one.add(other).toString())
+  console.log(one.sub(other).toString())
+  console.log(one.crossProduct(other).toString())
+
   console.timeEnd()
 })
 

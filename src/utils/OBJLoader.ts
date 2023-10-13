@@ -1,3 +1,5 @@
+import { Point3 } from '~/types'
+
 const _face_vertex_data_separator_pattern = /\s+/
 
 const load = async (url: string) => {
@@ -5,14 +7,8 @@ const load = async (url: string) => {
   return parse(text)
 }
 
-type Vertice = {
-  x: number
-  y: number
-  z: number
-}
-
 const parse = (text: string) => {
-  const vertices: Vertice[] = []
+  const vertices: Point3[] = []
   const faceVertices = []
   if (text.indexOf('\r\n') !== -1) {
     // 替换所有\r\n为\n
