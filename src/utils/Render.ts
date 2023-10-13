@@ -1,5 +1,5 @@
 import { Vector } from '~/class/Vector'
-import { Point2, Point3 } from '~/types'
+import { Point2 } from '~/types'
 
 class Render {
   private canvas: HTMLCanvasElement
@@ -62,24 +62,59 @@ class Render {
     }
   }
 
-  drawTriangle = (tPoint: Point3[], p: Point2, color: string) => {
+  drawTriangle2 = (tPoint: Point2[], color: string) => {
     this.color = color
-    // const AB = new Vector(tPoint[1].x - tPoint[0].x, tPoint[1].y - tPoint[0].y)
-    // const BC = new Vector(tPoint[2].x - tPoint[1].x, tPoint[2].y - tPoint[1].y)
-    // const CA = new Vector(tPoint[0].x - tPoint[2].x, tPoint[0].y - tPoint[2].y)
+    const AB = new Vector(tPoint[1].x - tPoint[0].x, tPoint[1].y - tPoint[0].y)
+    const BC = new Vector(tPoint[2].x - tPoint[1].x, tPoint[2].y - tPoint[1].y)
+    const CA = new Vector(tPoint[0].x - tPoint[2].x, tPoint[0].y - tPoint[2].y)
 
-    // const { boxmin, boxmax } = this.getBoxRange(tPoint)
-    // for (let x = boxmin[0]; x <= boxmax[0]; x++) {
-    //   for (let y = boxmin[1]; y <= boxmax[1]; y++) {
-    //     const ABp = AB.crossProduct(p)
-    //     const BCp = BC.crossProduct(p)
-    //     const CAp = CA.crossProduct(p)
-    //     console.log(ABp, BCp, CAp)
-    //   }
-    // }
+    const { boxmin, boxmax } = this.getBoxRange(tPoint)
+
+    const p: Point2 = { x: 0, y: 0 }
+    for (p.x = boxmin[0]; p.x <= boxmax[0]; p.x++) {
+      for (p.y = boxmin[1]; p.y <= boxmax[1]; p.y++) {
+        const AP = new Vector(p.x - tPoint[0].x, p.y - tPoint[0].y)
+        const BP = new Vector(p.x - tPoint[1].x, p.y - tPoint[1].y)
+        const CP = new Vector(p.x - tPoint[2].x, p.y - tPoint[2].y)
+
+        const ABp = AB.crossProduct2(AP)
+        const BCp = BC.crossProduct2(BP)
+        const CAp = CA.crossProduct2(CP)
+
+        if (ABp >= 0 && BCp >= 0 && CAp >= 0) {
+          this.drawPixel(p.x, p.y)
+        }
+      }
+    }
   }
 
-  getBoxRange = (p: Point3[]) => {
+  drawTriangle = (tPoint: Point2[], color: string) => {
+    this.color = color
+    const { boxmin, boxmax } = this.getBoxRange(tPoint)
+    const p: Point2 = { x: 0, y: 0 }
+
+    for (p.x = boxmin[0]; p.x <= boxmax[0]; p.x++) {
+      for (p.y = boxmin[1]; p.y <= boxmax[1]; p.y++) {
+        const x = new Vector(tPoint[1].x - tPoint[0].x, tPoint[2].x - tPoint[0].x, tPoint[0].x - p.x)
+        const y = new Vector(tPoint[1].y - tPoint[0].y, tPoint[2].y - tPoint[0].y, tPoint[0].y - p.y)
+        let xy = x.crossProduct3(y)
+
+        if (Math.abs(xy.components[2]) < 1) {
+          xy = new Vector(-1, 1, 1)
+        }
+        xy = new Vector(
+          1 - (xy.components[0] + xy.components[1]) / xy.components[2],
+          xy.components[0] / xy.components[2],
+          xy.components[1] / xy.components[2]
+        )
+        if (xy.components[0] >= 0 && xy.components[1] >= 0 && xy.components[2] >= 0) {
+          this.drawPixel(p.x, p.y)
+        }
+      }
+    }
+  }
+
+  getBoxRange = (p: Point2[]) => {
     const boxmin = [this.w, this.h]
     const boxmax = [0, 0]
     for (let i = 0; i < 3; i++) {
